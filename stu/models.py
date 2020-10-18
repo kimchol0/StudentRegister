@@ -21,8 +21,10 @@ class Course(models.Model):
 class Student(models.Model):
     sno = models.AutoField(primary_key=True)
     sname = models.CharField(max_length=30)
-    cls = models.ForeignKey(Clazz,on_delete=models.CASCADE)
+    cls = models.ForeignKey(Clazz, on_delete=models.CASCADE)
     cour = models.ManyToManyField(Course)
 
     def __str__(self):
         return u'Student:%s' % self.sname
+
+# 完成上一步操作之后输入命令 python manage.py migrate执行迁移文件，数据库中的数据表就创建完成了
