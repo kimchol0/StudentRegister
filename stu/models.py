@@ -27,4 +27,39 @@ class Student(models.Model):
     def __str__(self):
         return u'Student:%s' % self.sname
 
+
 # 完成上一步操作之后输入命令 python manage.py migrate执行迁移文件，数据库中的数据表就创建完成了
+
+# 根据班级名称获取班级对象
+def getCls(cname):
+    try:
+        cls = Clazz.objects.get(cname=cname)
+    except Clazz.DoesNotExist:
+        cls = Clazz.objects.create(cname=cname)
+    return cls
+
+
+def getCourseList(*coursenames):
+    courseList = []
+    for cn in coursenames:
+        try:
+            c = Course.objects.get(course_name=cn)
+        except Course.DoesNotExist:
+            c = Course.objects.create(course_name=cn)
+        courseList.append(c)
+    return courseList
+
+
+def registerStu(sname, cname, *coursenames):
+    # 获取班级对象
+    cls = getCls(cname)
+    # 获取课程对象列表
+    courseList = getCourseList(*coursenames)
+    # 插入学生表数据
+    try:
+        stu = Student.objects.get(sname=sname)
+    except Student.DoesNotExist:
+        stu = Student.objects.create(sname=sname, cls=cls)
+    # 插入中间表数据
+    stu.cour.add(*courseList)
+    return True
