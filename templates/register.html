@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/student/" method="POST">
+    <p><label for="sn">姓名：</label><input name="sname",id="sn" /></p>
+    <p><label for="sc">所属班级：</label>
+        <select name="clsname" id="sc">
+            <option value="B201python">B201python</option>
+            <option value="B202JAVA">B202JAVA</option>
+            <option value="B203HTML5">B203HTML5</option>
+        </select>
+    </p>
+    <p><label for="cour">选课：</label>
+        <input type="checkbox" name="coursename" value="Python" />Python &emsp;
+        <input type="checkbox" name="coursename" value="JAVA" />JAVA &emsp;
+        <input type="checkbox" name="coursename" value="HTML5" />HTML5 &emsp;
+    </p>
+    <p>
+        <input type="submit" value="注册" />
+    </p>
+</form>
+</body>
+</html>
