@@ -6,6 +6,7 @@
 </head>
 <body>
 <form action="/student/" method="POST">
+    {% csrf_token %}
     <p><label for="sn">姓名：</label><input name="sname",id="sn" /></p>
     <p><label for="sc">所属班级：</label>
         <select name="clsname" id="sc">
