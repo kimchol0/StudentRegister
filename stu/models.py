@@ -25,14 +25,20 @@ class CustomManager(Manager):
         clazz = kwargs.get('cls', '')
         # 班级信息的入库操作
         clas = self.getClsObj(clazz)
-        kwargs['cls'] = clas
-        course = kwargs.pop('course')
+        kwargs['cls'] = clas  # 相当于Student.objects.create(sname='',cls=clas)
+        course = kwargs.pop('cour')
         # 学生信息的入库操作
         stu = Manager.create(self, **kwargs)
         # 课程信息的入库操作
         courseList = self.getCourseList(*course)
         # 学生课程的中间表入库操作
         stu.cour.add(*courseList)
+
+    '''
+    >>>from stu.models import *
+    >>>Student.objects.create(sname='zhaoliu',cls='B999CSS',cour=('css','js'))
+    然后数据库中会插入对应的数据
+    '''
 
 
 class Clazz(models.Model):
