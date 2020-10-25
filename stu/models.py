@@ -1,7 +1,40 @@
 from django.db import models
+from django.db.models.manager import Manager
 
 
 # Create your models here.
+class CustomManager(Manager):
+    def getClsObj(self, cname):
+        try:
+            cls = Clazz.objects.get(cname=cname)
+        except Clazz.DoesNotExist:
+            cls = Clazz.objects.create(cname=cname)
+        return cls
+
+    def getCourseList(self, *coursenames):
+        cList = []
+        for cn in coursenames:
+            try:
+                cour = Course.objects.get(course_name=cn)
+            except Course.DoesNotExist:
+                cour = Course.objects.create(course_name=cn)
+            cList.append(cour)
+        return cList
+
+    def create(self, **kwargs):
+        clazz = kwargs.get('cls', '')
+        # 班级信息的入库操作
+        clas = self.getClsObj(clazz)
+        kwargs['cls'] = clas
+        course = kwargs.pop('course')
+        # 学生信息的入库操作
+        stu = Manager.create(self, **kwargs)
+        # 课程信息的入库操作
+        courseList = self.getCourseList(*course)
+        # 学生课程的中间表入库操作
+        stu.cour.add(*courseList)
+
+
 class Clazz(models.Model):
     cno = models.AutoField(primary_key=True)
     cname = models.CharField(max_length=30)
@@ -23,6 +56,8 @@ class Student(models.Model):
     sname = models.CharField(max_length=30)
     cls = models.ForeignKey(Clazz, on_delete=models.CASCADE)
     cour = models.ManyToManyField(Course)
+
+    objects = CustomManager()
 
     def __str__(self):
         return u'Student:%s' % self.sname
